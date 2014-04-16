@@ -32,7 +32,18 @@
   end
    %>
 <% if @options[:tracker] %>
-   ga('send', 'pageview');
+  <% if @options[:turbolinks] %>
+    if (window.history && window.history.pushState && window.history.replaceState) {
+      document.addEventListener('page:change', function(event) {
+        ga('set', 'location', location.href.split('#')[0])
+        ga('send', 'pageview');
+      });
+    } else {
+      ga('send', 'pageview');
+    }
+  <% else %>
+    ga('send', 'pageview');
+  <% end %>
 <% end %>
 
 </script>
